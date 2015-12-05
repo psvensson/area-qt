@@ -1,0 +1,23 @@
+{
+  "name": "area-qt",
+  "version": "1.0.0",
+  "description": "node.js quadtree implementation which can both insert, remove and check for collissions between objects with rectangular properties",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psvensson/area-qt.git"
+  },
+  "keywords": [
+    "quadtree",
+    "node.js"
+  ],
+  "author": "Peter Svensson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psvensson/area-qt/issues"
+  },
+  "homepage": "https://github.com/psvensson/area-qt#readme"
+}
