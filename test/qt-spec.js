@@ -11,45 +11,45 @@
     qt = new QuadTree({
       x: -100,
       y: -100,
-      width: 100,
+      width: 200,
       height: 200
-    }, 200);
+    }, 5);
     r1 = {
       x: 0,
       y: 0,
       width: 10,
-      height: -10
+      height: 10
     };
     o1 = {
       x: 0,
       y: 0,
       width: 10,
-      height: -10,
+      height: 10,
       id: 17
     };
-    it('should be able to insert and retrieve a rect', function(done) {
+    it('should be able to insert and retrieve an object', function(done) {
       var test;
       qt.insert(o1);
       test = qt.retrieve(r1)[0];
       expect(test.id).to.equal(o1.id);
       return done();
     });
-    return it('should be able to insert and retrieve a number of rects that is larger than maxobject', function(done) {
+    it('should be able to insert and retrieve a number of objects that is larger than maxobject', function(done) {
       var i, j, o, r, succeed, testarr, x, y;
       testarr = [];
       succeed = false;
-      for (i = j = 1; j <= 500; i = ++j) {
+      for (i = j = 1; j <= 20; i = ++j) {
         x = parseInt(Math.random() * 100);
         y = parseInt(Math.random() * 100);
         o = {
-          x: 0,
+          x: x,
           y: y,
           width: 10,
           height: 10,
           id: i
         };
         r = {
-          x: 0,
+          x: x,
           y: y,
           width: 10,
           height: 10
@@ -72,6 +72,27 @@
         })(this));
       });
       expect(succeed).to.equal(true);
+      return done();
+    });
+    return it('should be able to insert and remove an object', function(done) {
+      var o2, r2, result;
+      r2 = {
+        x: 5,
+        y: 2,
+        width: 10,
+        height: 10
+      };
+      o2 = {
+        x: 5,
+        y: 2,
+        width: 10,
+        height: 10,
+        id: 4711
+      };
+      qt.insert(o2);
+      qt.remove(r2);
+      result = qt.retrieve(r2);
+      expect(result.length).to.equal(0);
       return done();
     });
   });
