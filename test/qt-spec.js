@@ -7,24 +7,67 @@
   QuadTree = require('../lib/QuadTree');
 
   describe('QuadTree Tests', function() {
-    var qt, r1;
+    var o1, qt, r1;
     qt = new QuadTree({
       x: -100,
       y: -100,
       width: 200,
       height: 200
-    }, 10);
+    }, 5);
     r1 = {
-      x: -1,
-      y: -1,
+      x: 0,
+      y: 0,
       width: 10,
       height: -10
     };
-    return it('should be able to insert and retrieve a rect', function(done) {
+    o1 = {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: -10,
+      id: 17
+    };
+    it('should be able to insert and retrieve a rect', function(done) {
       var test;
-      qt.insert(r1);
+      qt.insert(o1);
       test = qt.retrieve(r1);
-      expect(test).to.equal(r1);
+      expect(test.id).to.equal(o1.id);
+      return done();
+    });
+    return it('should be able to insert and retrieve a number of rects that is larger than maxobject', function(done) {
+      var i, j, o, r, succeed, testarr, x, y;
+      testarr = [];
+      succeed = true;
+      for (i = j = 1; j <= 10; i = ++j) {
+        x = parseInt(Math.random() * 100);
+        y = parseInt(Math.random() * 100);
+        o = {
+          x: x,
+          y: y,
+          width: 10,
+          height: 10,
+          id: i
+        };
+        r = {
+          x: x,
+          y: y,
+          width: 10,
+          height: 10
+        };
+        testarr.push({
+          o: o,
+          r: r
+        });
+        qt.insert(o);
+      }
+      testarr.forEach(function(test) {
+        var result;
+        result = qt.retrieve(test.r);
+        if (result.id !== test.o.id) {
+          return succeed = false;
+        }
+      });
+      expect(succeed).to.equal(true);
       return done();
     });
   });
