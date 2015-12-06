@@ -11,9 +11,9 @@
     qt = new QuadTree({
       x: -100,
       y: -100,
-      width: 200,
+      width: 100,
       height: 200
-    }, 5);
+    }, 200);
     r1 = {
       x: 0,
       y: 0,
@@ -30,26 +30,26 @@
     it('should be able to insert and retrieve a rect', function(done) {
       var test;
       qt.insert(o1);
-      test = qt.retrieve(r1);
+      test = qt.retrieve(r1)[0];
       expect(test.id).to.equal(o1.id);
       return done();
     });
     return it('should be able to insert and retrieve a number of rects that is larger than maxobject', function(done) {
       var i, j, o, r, succeed, testarr, x, y;
       testarr = [];
-      succeed = true;
-      for (i = j = 1; j <= 10; i = ++j) {
+      succeed = false;
+      for (i = j = 1; j <= 500; i = ++j) {
         x = parseInt(Math.random() * 100);
         y = parseInt(Math.random() * 100);
         o = {
-          x: x,
+          x: 0,
           y: y,
           width: 10,
           height: 10,
           id: i
         };
         r = {
-          x: x,
+          x: 0,
           y: y,
           width: 10,
           height: 10
@@ -63,9 +63,13 @@
       testarr.forEach(function(test) {
         var result;
         result = qt.retrieve(test.r);
-        if (result.id !== test.o.id) {
-          return succeed = false;
-        }
+        return result.forEach((function(_this) {
+          return function(res) {
+            if (res.id === test.o.id) {
+              return succeed = true;
+            }
+          };
+        })(this));
       });
       expect(succeed).to.equal(true);
       return done();
