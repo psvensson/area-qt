@@ -1,3 +1,5 @@
+asciitree = require('ascii-tree')
+
 class QuadTree
 
   #---------------------------------------------------------------------- External
@@ -5,7 +7,7 @@ class QuadTree
   constructor: (@bounds, @maxObjectsPerLevel, @parent, @idProperty = 'id') ->
     @subTrees = []
     @objects  = []
-    console.log 'new tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height
+    #console.log 'new tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height
 
   insert: (rect) =>
     #console.log 'insert called for '+rect.x+','+rect.y+' tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height+' objects.length is '+@objects.length+' maxobjects are '+@maxObjectsPerLevel
@@ -30,7 +32,7 @@ class QuadTree
           #console.log 'post-split inserting object '+o.x+','+o.y+' into subtree with index '+index+' -> '+subtree.bounds.x+','+subtree.bounds.y+' - '+subtree.bounds.width+','+subtree.bounds.height
           subtree.insert(o)
         else
-          #console.log 'post-split leaving object '+o.x+','+o.y+' in this tree '
+          #console.log 'post-split leaving object '+o.x+','+o.y+' in this tree because it could not fit into any subtree of '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height
           newObjects.push o
       @objects = newObjects
     ind = @._getIndexFor(rect)
@@ -79,29 +81,44 @@ class QuadTree
       # and delete us
       @parent.subTrees = []
 
-  getCollissionsFor: (rect) =>
-
+  getCollissionsFor: (rect, rv) =>
+    rv = rv or []
+    @objects.forEach (o) =>
+      if (@._isWithin(rect, o) or @._isWithin(o, rect)) then rv.push(o)
+    index = @._getIndexFor(rect)
+    if(index > -1)
+      @subTrees[index].getCollissionsFor(rect, rv)
+    else
+      rv
 
   #---------------------------------------------------------------------- Internal
+
+  _isWithin: (r1, r2) =>
+    r1.x <= r2.x+r2.width and r1.x >= r2.x and r1.y <= r2.y+r2.height and r1.y >= r2.y
 
   _getIndexFor: (rect) =>
     index = -1
     [midx,midy] = @._getMidPoints()
 
     top     = rect.y < midy and (rect.y + rect.height) < midy
-    bottom  = rect.y >= midy and (rect.y + rect.height) < @bounds.y + @bounds.height
+    bottom  = rect.y > midy and (rect.y + rect.height) < @bounds.y + @bounds.height
     left    = rect.x < midx and (rect.x + rect.width) < midx
-    right   = rect.x >= midx and (rect.x + rect.width) < @bounds.x + @bounds.width
+    right   = rect.x > midx and (rect.x + rect.width) < @bounds.x + @bounds.width
 
     if top and right then index = 0
     if top and left then index = 1
     if bottom and left then index = 2
     if bottom and right then index = 3
 
+    #console.log 'top = '+top+', bottom = '+bottom+', left = '+left+', right = '+right
     #console.log '_getIndexFor for '+rect.x+','+rect.y+' - '+rect.width+','+rect.height+' returns '+index+' horizontal midpoint = '+midy+', vertical midpoint = '+midx+', bounds = '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height
     index
 
   _getMidPoints: ()=> [@bounds.x + @bounds.width / 2, @bounds.y + @bounds.height / 2]
+
+  _dumpTree: (level) =>
+    # input = '#root node\r\n##node1\r\n###\r\nnode1\r\n##node2';
+    # tree = asciitree.generate(str);
 
 
 module.exports = QuadTree

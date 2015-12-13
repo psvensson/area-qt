@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/psvensson/area-qt#readme",
   "dependencies": {
+    "ascii-tree": "^0.3.0",
     "chai": "^3.4.1",
     "mocha": "^2.3.4"
   }

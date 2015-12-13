@@ -27,20 +27,19 @@
       height: 10,
       id: 17
     };
-    it('should be able to insert and retrieve an object', function(done) {
+    it('should be able to insert and retrieve an object', function() {
       var test;
       qt.insert(o1);
       test = qt.retrieve(r1)[0];
-      expect(test.id).to.equal(o1.id);
-      return done();
+      return expect(test.id).to.equal(o1.id);
     });
-    it('should be able to insert and retrieve a number of objects that is larger than maxobject', function(done) {
+    it('should be able to insert and retrieve a number of objects that is larger than maxobject', function() {
       var i, j, o, r, succeed, testarr, x, y;
       testarr = [];
       succeed = false;
       for (i = j = 1; j <= 20; i = ++j) {
-        x = parseInt(Math.random() * 100);
-        y = parseInt(Math.random() * 100);
+        x = parseInt(Math.random() * 200) - 100;
+        y = parseInt(Math.random() * 200) - 100;
         o = {
           x: x,
           y: y,
@@ -71,10 +70,9 @@
           };
         })(this));
       });
-      expect(succeed).to.equal(true);
-      return done();
+      return expect(succeed).to.equal(true);
     });
-    return it('should be able to insert and remove an object', function(done) {
+    it('should be able to insert and remove an object', function() {
       var o2, r2, result;
       r2 = {
         x: 5,
@@ -92,8 +90,82 @@
       qt.insert(o2);
       qt.remove(r2);
       result = qt.retrieve(r2);
-      expect(result.length).to.equal(0);
-      return done();
+      return expect(result.length).to.equal(0);
+    });
+    it('should be able to insert a large object in a split tree and verify it stays in the top node', function() {
+      var exists, i, j, o, o3, r, r3, succeed, testarr, x, y;
+      testarr = [];
+      succeed = false;
+      for (i = j = 1; j <= 20; i = ++j) {
+        x = parseInt(Math.random() * 100);
+        y = parseInt(Math.random() * 100);
+        o = {
+          x: x,
+          y: y,
+          width: 10,
+          height: 10,
+          id: i
+        };
+        r = {
+          x: x,
+          y: y,
+          width: 10,
+          height: 10
+        };
+        testarr.push({
+          o: o,
+          r: r
+        });
+        qt.insert(o);
+      }
+      r3 = {
+        x: -50,
+        y: -50,
+        width: 100,
+        height: 100
+      };
+      o3 = {
+        x: -50,
+        y: -50,
+        width: 100,
+        height: 100,
+        id: 111
+      };
+      qt.insert(o3);
+      exists = false;
+      qt.objects.forEach(function(oo) {
+        if (oo.id === 111) {
+          return exists = true;
+        }
+      });
+      return expect(exists).to.equal(true);
+    });
+    return it('should be able to collide two overlapping rects', function() {
+      var collissions, exists, o2;
+      o1 = {
+        x: 0,
+        y: 0,
+        width: 10,
+        height: 10,
+        id: 176
+      };
+      o2 = {
+        x: -5,
+        y: -5,
+        width: 10,
+        height: 10,
+        id: 4712
+      };
+      qt.insert(o1);
+      qt.insert(o2);
+      collissions = qt.getCollissionsFor(o1);
+      exists = false;
+      collissions.forEach(function(oo) {
+        if (oo.id === 4712) {
+          return exists = true;
+        }
+      });
+      return expect(exists).to.equal(true);
     });
   });
 
