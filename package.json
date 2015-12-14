@@ -1,6 +1,6 @@
 {
   "name": "area-qt",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "node.js quadtree implementation which can both insert, remove and check for collissions between objects with rectangular properties",
   "main": "index.js",
   "scripts": {

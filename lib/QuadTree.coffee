@@ -43,7 +43,8 @@ class QuadTree
     else
       @objects.push(rect)
 
-  retrieve: (rect) =>
+  retrieve: (_rect) =>
+    rect = {x: _rect.x, y: _rect.y, width: _rect.width or 1, height: _rect.height or 1}
     #console.log 'retrieve at tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height+' called for '+rect.x+','+rect.y
     rv = []
     # if we have subtrees
@@ -84,7 +85,7 @@ class QuadTree
   getCollissionsFor: (rect, rv) =>
     rv = rv or []
     @objects.forEach (o) =>
-      if (@._isWithin(rect, o) or @._isWithin(o, rect)) then rv.push(o)
+      if (@._isWithin(rect, o) or @._isWithin(o, rect)) and o isnt rect then rv.push(o)
     index = @._getIndexFor(rect)
     if(index > -1)
       @subTrees[index].getCollissionsFor(rect, rv)
