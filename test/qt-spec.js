@@ -33,6 +33,42 @@
       test = qt.retrieve(r1)[0];
       return expect(test.id).to.equal(o1.id);
     });
+    it('should be able to insert a mixed coord object', function() {
+      var mo, ro, test;
+      mo = {
+        x: 1,
+        y: -1,
+        width: 1,
+        height: 1,
+        id: 333
+      };
+      ro = {
+        x: 1,
+        y: -1,
+        width: 1,
+        height: 1
+      };
+      qt.insert(mo);
+      test = qt.retrieve(ro)[0];
+      return expect(test.id).to.equal(mo.id);
+    });
+    it('should be able to insert an object with no height or width', function() {
+      var mo, ro, test;
+      mo = {
+        x: 1,
+        y: -1,
+        id: 333
+      };
+      ro = {
+        x: 1,
+        y: -1,
+        width: 1,
+        height: 1
+      };
+      qt.insert(mo);
+      test = qt.retrieve(ro)[0];
+      return expect(test.id).to.equal(mo.id);
+    });
     it('should be able to insert and retrieve a number of objects that is larger than maxobject', function() {
       var i, j, o, r, succeed, testarr, x, y;
       testarr = [];

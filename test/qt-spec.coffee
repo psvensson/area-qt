@@ -13,6 +13,20 @@ describe 'QuadTree Tests', ->
     test = qt.retrieve(r1)[0]
     expect(test.id).to.equal(o1.id)
 
+  it 'should be able to insert a mixed coord object', ()->
+    mo = {x:1, y:-1, width: 1, height: 1, id:333}
+    ro = {x:1, y:-1, width: 1, height: 1}
+    qt.insert(mo)
+    test = qt.retrieve(ro)[0]
+    expect(test.id).to.equal(mo.id)
+
+  it 'should be able to insert an object with no height or width', ()->
+    mo = {x:1, y:-1, id:333}
+    ro = {x:1, y:-1, width: 1, height: 1}
+    qt.insert(mo)
+    test = qt.retrieve(ro)[0]
+    expect(test.id).to.equal(mo.id)
+
   it 'should be able to insert and retrieve a number of objects that is larger than maxobject', ()->
     testarr = []
     succeed = false

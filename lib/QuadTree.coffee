@@ -10,9 +10,13 @@ class QuadTree
     #console.log 'new tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height
 
   insert: (rect) =>
+    if not rect.width then rect.width = 1
+    if not rect.height then rect.height = 1
     #console.log 'insert called for '+rect.x+','+rect.y+' tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height+' objects.length is '+@objects.length+' maxobjects are '+@maxObjectsPerLevel
     if rect.x < @bounds.x or rect.x > @bounds.x + @bounds.width or rect.y < @bounds.y or rect.y > @bounds.y + @bounds.height
       console.log 'area-quadtree insert failed for '+rect.x+','+rect.y+' tree '+@bounds.x+','+@bounds.y+' - '+@bounds.width+','+@bounds.height+' objects.length is '+@objects.length+' maxobjects are '+@maxObjectsPerLevel
+      console.log '----------- object is'
+      console.dir rect
       xyzzy()
     # if we are at maximum object per level
     #console.log 'inserting object '+rect.x+','+rect.y
